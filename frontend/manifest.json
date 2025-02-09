@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Email Scanner",
+  "version": "1.0.0",
+  "description": "Mail Scanner that scan for malwares.",
+  "permissions": ["storage", "activeTab"],
+  "action": {
+    "default_popup": "index.html"
+  },
+
+  "content_scripts": [
+    {
+      "js": ["src/content.jsx"],
+      "matches": ["https://mail.google.com/mail/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  }
+}
