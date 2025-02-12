@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Scan } from "lucide-react";
 import { useState } from "react";
+import { extractEmailContent } from "@/background.js";
 
 const ScanButton = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -22,7 +23,7 @@ const ScanButton = () => {
           className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-blue-500/25"
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          onClick={() => console.log("Scan button clicked")}
+          onClick={() => extractEmailContent()}
         >
           <Scan
             className={`mr-2 transition-transform duration-300 ${
