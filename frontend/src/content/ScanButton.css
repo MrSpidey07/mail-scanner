@@ -1,0 +1,39 @@
+.scan-button-container {
+  position: absolute;
+  bottom: 2rem;
+  right: 3rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem; /* Equivalent to p-1 (0.25rem) */
+}
+
+.scan-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* Equivalent to gap-2 (0.5rem) */
+  padding: 0.25rem 0.75rem; /* py-1 (0.25rem) and px-3 (0.75rem) */
+  background-color: #ffffff;
+  color: #374151; /* text-gray-700 */
+  border: 1px solid #d1d5db; /* border-gray-300 */
+  border-radius: 4px; /* rounded */
+  font-size: 0.875rem; /* roughly text-sm (0.875rem) */
+  font-weight: 400; /* font-normal */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* shadow-sm */
+  transition: all 150ms ease-in-out;
+  cursor: pointer;
+}
+
+.scan-button:hover {
+  background-color: #f9fafb; /* hover:bg-gray-50 */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* hover:shadow */
+}
+
+.scan-icon {
+  transition: color 150ms ease-in-out;
+  color: #4b5563; /* text-gray-600 */
+}
+
+.scan-icon.hover {
+  color: #2563eb; /* text-blue-600 */
+}

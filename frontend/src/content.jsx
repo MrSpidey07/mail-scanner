@@ -1,6 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import ScanButton from "@/content/ScanButton";
+import "@/content/ScanButton.css";
 
 console.log("Content script loaded"); // Debug log
 
