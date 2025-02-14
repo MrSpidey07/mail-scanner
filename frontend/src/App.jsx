@@ -1,10 +1,11 @@
 import ScanButton from "./content/ScanButton";
+import Options from "./Options";
 
 function App() {
   return (
     <div className="flex items-center justify-center min-h-96 min-w-96">
-      <h1>Hello from Meet</h1>
-      <ScanButton />
+      {/* <h1>Hello from Meet</h1> */}
+      <Options/>
     </div>
   );
 }
