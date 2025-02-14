@@ -1,5 +1,4 @@
-import ScanButton from "./content/ScanButton";
-import Options from "./Options";
+import Options from "./content/Options";
 
 function App() {
   return (
