@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 
+phishing_urls.db
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
