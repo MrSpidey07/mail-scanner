@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { getScannedReport } from "../controllers/scanner.controller.js";
+import {
+  getScannedReport,
+  getURLScan,
+} from "../controllers/scanner.controller.js";
 
 const route = Router();
 
-route.get("/scan", getScannedReport);
+route.post("/scan", getScannedReport);
+route.post("/scanurl", getURLScan);
 
 export default route;

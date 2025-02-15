@@ -1,70 +1,103 @@
-import React from "react";
+import { useState } from "react";
 import { createRoot } from "react-dom/client";
 import ScanButton from "@/content/ScanButton";
+import ResultPopup from "@/content/ResultPopup";
+import { extractEmailContent, getScannedReport } from "@/background";
 import "@/content/ScanButton.css";
 
-console.log("Content script loaded"); // Debug log
+// Container component that manages both the scan button and the result popup
+const ScannerContainer = () => {
+  const [scanData, setScanData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-// Function to inject button
-const injectButton = () => {
-  console.log("Attempting to inject button"); // Debug log
+  const handleScan = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-  // Find Gmail's Div
+      // Extract email content from Gmail page
+      const emailData = extractEmailContent();
+      if (!emailData) {
+        throw new Error("No email content found");
+      }
+
+      // Retrieve scan report based on the email content
+      const result = await getScannedReport(emailData);
+      console.log("Scan result:", result);
+      setScanData(result);
+    } catch (err) {
+      setError(err.message);
+      console.error("Scan error:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setScanData(null);
+    setError(null);
+  };
+
+  return (
+    <>
+      <ScanButton onClick={handleScan} isLoading={isLoading} />
+      {(scanData || error) && (
+        <ResultPopup data={scanData} error={error} onClose={handleClose} />
+      )}
+    </>
+  );
+};
+
+const injectScanner = () => {
+  console.log("Attempting to inject scanner");
   const gmailContainer = document.querySelector(".nH.a98.iY");
-  console.log("Gmail container found:", !!gmailContainer); // Debug log
+  console.log("Gmail container found:", !!gmailContainer);
 
   if (gmailContainer) {
-    // Check if our button already exists
-    const existingButton = document.querySelector(".email-scanner-container");
-    if (!existingButton) {
-      console.log("Creating new button container"); // Debug log
-
-      // Create container for our button
-      const buttonContainer = document.createElement("div");
-      buttonContainer.className = "email-scanner-container";
-
-      // Add button at the beginning of the container
-      gmailContainer.appendChild(buttonContainer);
+    const existingContainer = document.querySelector(
+      ".email-scanner-container"
+    );
+    if (!existingContainer) {
+      console.log("Creating new scanner container");
+      const container = document.createElement("div");
+      container.className = "email-scanner-container";
+      gmailContainer.appendChild(container);
 
       try {
-        // Create React root and render button
-        const root = createRoot(buttonContainer);
-        root.render(React.createElement(ScanButton));
-        console.log("Button rendered successfully"); // Debug log
+        const root = createRoot(container);
+        root.render(<ScannerContainer />);
+        console.log("Scanner rendered successfully");
       } catch (error) {
-        console.error("Error rendering button:", error); // Debug error
+        console.error("Error rendering scanner:", error);
       }
     }
   }
 };
 
-// Function to wait for Gmail to load
 const waitForGmail = () => {
   const interval = setInterval(() => {
-    console.log("Checking for Gmail container..."); // Debug log
+    console.log("Checking for Gmail container...");
     const gmailContainer = document.querySelector(".nH.a98.iY");
     if (gmailContainer) {
-      console.log("Gmail container found, injecting button"); // Debug log
+      console.log("Gmail container found, injecting scanner");
       clearInterval(interval);
-      injectButton();
+      injectScanner();
     }
-  }, 1000); // Check every second
+  }, 1000);
 
-  // Clear interval after 30 seconds to prevent infinite checking
   setTimeout(() => clearInterval(interval), 30000);
 };
 
-// Initialize content script
 const init = () => {
-  console.log("Initializing content script"); // Debug log
+  console.log("Initializing content script");
   waitForGmail();
 
-  // Also observe DOM changes
   const observer = new MutationObserver(() => {
     const gmailContainer = document.querySelector(".nH.a98.iY");
     if (gmailContainer && !document.querySelector(".email-scanner-container")) {
-      console.log("Gmail container found through observer"); // Debug log
-      injectButton();
+      console.log("Gmail container found through observer");
+      injectScanner();
     }
   });
 
@@ -74,5 +107,4 @@ const init = () => {
   });
 };
 
-// Start the content script
 init();

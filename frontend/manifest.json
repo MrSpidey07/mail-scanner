@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Mail Scanner that scan for malwares.",
   "permissions": ["storage", "activeTab"],
+  "host_permissions": ["http://localhost:3001/*"],
   "action": {
     "default_popup": "index.html"
   },
